@@ -1,25 +1,35 @@
 const { PrismaClient } = require("@prisma/client")
 const prismaClient = new PrismaClient()
 
-const create = (async (req, res) => {
-    await prismaClient.user.create({
-        data: {
-            userId: '01',
-            firstName: 'John',
-            lastname: 'Smith',
-            userName: 'JohnSmith',
-            passWord: '1234'
-        }
-    }).then((value) => {
-        res.json({
-            status: true,
-            status_code: 200,
-            result: value,
-            message: 'User created successfully',
+const create = (async (ctx) => {
+    try {
+        const req = ctx.request.body
+        const responDB = await prismaClient.user.create({
+            data: {
+                userId: req?.userId,
+                firstName: req?.firstName,
+                lastname: req?.lastname,
+                userName: req?.userName,
+                passWord: req?.passWord
+            }
         })
-    }).catch((e) => {
-        throw new e
-    })
+        if (responDB) {
+            ctx.body = {
+                status: true,
+                status_code: 200,
+                message: ''
+            }
+        }
+        else {
+            ctx.body = {
+                status: false,
+                status_code: 500,
+                message: ''
+            }
+        }
+    }
+    catch (e) {
+    }
 })
 
 module.exports = {

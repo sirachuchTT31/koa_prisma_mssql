@@ -3,10 +3,10 @@ const prisma = new PrismaClient()
 
 async function main() {
     await prisma.$connect().then((v) => {
-
+        console.log("connect db success !")
     }).catch((e) => {
         prisma.$disconnect()
     })
 }
 
-modeule.exports = main()
+module.exports = main()
